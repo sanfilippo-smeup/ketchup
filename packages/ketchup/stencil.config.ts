@@ -11,11 +11,11 @@ export const config: Config = {
         {
             type: 'dist',
         },
-        /*{
+        {
             type: 'www',
             // uncomment the following line to disable service workers in production
             // serviceWorker: null
-        }*/
+        }
     ],
     plugins: [
         sass()

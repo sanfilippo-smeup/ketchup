@@ -7,21 +7,23 @@ Libreria di webcomponents basata su Stencyl.js
 https://stenciljs.com/docs/distribution
 https://stenciljs.com/docs/config
 
-## Getting Started
+## Scripts
+Lista dei comandi scripts disponibili nel package.json.
 
-To start a new project using Stencil, clone this repo to a new directory:
-
-```bash
-npm init stencil app
+Tali comandi sono lanciabili anche dalla root del progetto tramite il proprio package manager.
+Il prefisso per questi comandi è 'k:'. Esempio:
+```
+yarn run k:build
 ```
 
-and run:
+Lancia il webserver di sviluppo locale:
 
 ```bash
 npm start
 ```
 
-To build the app for production, run:
+Effettua il build dell'applicazione per la produzione.
+Include compilazione per il comando 'start' e per l'utilizzo con l'esportazione.
 
 ```bash
 npm run build
