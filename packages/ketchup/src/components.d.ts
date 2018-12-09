@@ -7,71 +7,58 @@
 
 import '@stencil/core';
 
-import '@stencil/router';
-import '@stencil/state-tunnel';
-import {
-  MatchResults,
-} from '@stencil/router';
+
 
 
 export namespace Components {
 
-  interface AppHome {}
-  interface AppHomeAttributes extends StencilHTMLAttributes {}
-
-  interface AppProfile {
-    'match': MatchResults;
+  interface KupMatrix {
+    'text': string;
   }
-  interface AppProfileAttributes extends StencilHTMLAttributes {
-    'match'?: MatchResults;
+  interface KupMatrixAttributes extends StencilHTMLAttributes {
+    'text'?: string;
   }
 
-  interface AppRoot {}
-  interface AppRootAttributes extends StencilHTMLAttributes {}
+  interface KupLabel {
+    'text': string;
+  }
+  interface KupLabelAttributes extends StencilHTMLAttributes {
+    'text'?: string;
+  }
 }
 
 declare global {
   interface StencilElementInterfaces {
-    'AppHome': Components.AppHome;
-    'AppProfile': Components.AppProfile;
-    'AppRoot': Components.AppRoot;
+    'KupMatrix': Components.KupMatrix;
+    'KupLabel': Components.KupLabel;
   }
 
   interface StencilIntrinsicElements {
-    'app-home': Components.AppHomeAttributes;
-    'app-profile': Components.AppProfileAttributes;
-    'app-root': Components.AppRootAttributes;
+    'kup-matrix': Components.KupMatrixAttributes;
+    'kup-label': Components.KupLabelAttributes;
   }
 
 
-  interface HTMLAppHomeElement extends Components.AppHome, HTMLStencilElement {}
-  var HTMLAppHomeElement: {
-    prototype: HTMLAppHomeElement;
-    new (): HTMLAppHomeElement;
+  interface HTMLKupMatrixElement extends Components.KupMatrix, HTMLStencilElement {}
+  var HTMLKupMatrixElement: {
+    prototype: HTMLKupMatrixElement;
+    new (): HTMLKupMatrixElement;
   };
 
-  interface HTMLAppProfileElement extends Components.AppProfile, HTMLStencilElement {}
-  var HTMLAppProfileElement: {
-    prototype: HTMLAppProfileElement;
-    new (): HTMLAppProfileElement;
-  };
-
-  interface HTMLAppRootElement extends Components.AppRoot, HTMLStencilElement {}
-  var HTMLAppRootElement: {
-    prototype: HTMLAppRootElement;
-    new (): HTMLAppRootElement;
+  interface HTMLKupLabelElement extends Components.KupLabel, HTMLStencilElement {}
+  var HTMLKupLabelElement: {
+    prototype: HTMLKupLabelElement;
+    new (): HTMLKupLabelElement;
   };
 
   interface HTMLElementTagNameMap {
-    'app-home': HTMLAppHomeElement
-    'app-profile': HTMLAppProfileElement
-    'app-root': HTMLAppRootElement
+    'kup-matrix': HTMLKupMatrixElement
+    'kup-label': HTMLKupLabelElement
   }
 
   interface ElementTagNameMap {
-    'app-home': HTMLAppHomeElement;
-    'app-profile': HTMLAppProfileElement;
-    'app-root': HTMLAppRootElement;
+    'kup-matrix': HTMLKupMatrixElement;
+    'kup-label': HTMLKupLabelElement;
   }
 
 

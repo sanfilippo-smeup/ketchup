@@ -20,7 +20,8 @@
   },
   "dependencies": {
     "@stencil/core": "~0.15.2",
-    "@stencil/router": "~0.3.1"
+    "@stencil/router": "~0.3.1",
+    "@types/jest": "^23.3.10"
   },
   "license": "MIT",
   "devDependencies": {
