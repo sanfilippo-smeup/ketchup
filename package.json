@@ -1,6 +1,19 @@
 {
-  "name": "root",
+  "name": "ketchup-root",
+  "npmClient": "yarn",
   "private": true,
+  "scripts": {
+    "k:build": "lerna run build --scope ketchup --stream",
+    "k:start": "lerna run start --scope ketchup --stream",
+    "k:test": "lerna run test --scope ketchup --stream",
+    "k:test.watch": "lerna run test.watch --scope ketchup --stream",
+    "ksc:serve": "lerna run serve --scope ketchup-showcase --stream",
+    "ksc:build": "lerna run build --scope ketchup-showcase --stream",
+    "ksc:lint": "lerna run lint --scope ketchup-showcase --stream",
+    "ksc:test:e2e": "lerna run test:e2e --scope ketchup-showcase --stream",
+    "ksc:test:unit": "lerna run test:unit --scope ketchup-showcase --stream"
+  },
+  "version": "independent",
   "devDependencies": {
     "lerna": "^3.4.3"
   }

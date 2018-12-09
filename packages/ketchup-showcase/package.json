@@ -1,7 +1,13 @@
 {
   "name": "ketchup-showcase",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.0.1",
+  "keywords": [
+    "Sme.UP",
+    "KetchUP",
+    "webcomponents",
+    "showcase"
+  ],
+  "description": "KetchUP webcomponents library showcase",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
