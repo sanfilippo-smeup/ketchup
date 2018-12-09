@@ -5,6 +5,9 @@
       <router-link to="/about">About</router-link>
     </div>
     <router-view/>
+    <kup-label text="prova"/>
+    <app-home/>
+    <kup-matrix/>
   </div>
 </template>
 
