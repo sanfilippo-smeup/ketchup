@@ -25,17 +25,33 @@ export namespace Components {
   interface KupLabelAttributes extends StencilHTMLAttributes {
     'text'?: string;
   }
+
+  interface SmeupMat {
+    'columns': any[];
+    'filterable': boolean;
+    'rows': any[];
+    'sortable': boolean;
+  }
+  interface SmeupMatAttributes extends StencilHTMLAttributes {
+    'columns'?: any[];
+    'filterable'?: boolean;
+    'onOnCellClicked'?: (event: CustomEvent) => void;
+    'rows'?: any[];
+    'sortable'?: boolean;
+  }
 }
 
 declare global {
   interface StencilElementInterfaces {
     'KupMatrix': Components.KupMatrix;
     'KupLabel': Components.KupLabel;
+    'SmeupMat': Components.SmeupMat;
   }
 
   interface StencilIntrinsicElements {
     'kup-matrix': Components.KupMatrixAttributes;
     'kup-label': Components.KupLabelAttributes;
+    'smeup-mat': Components.SmeupMatAttributes;
   }
 
 
@@ -51,14 +67,22 @@ declare global {
     new (): HTMLKupLabelElement;
   };
 
+  interface HTMLSmeupMatElement extends Components.SmeupMat, HTMLStencilElement {}
+  var HTMLSmeupMatElement: {
+    prototype: HTMLSmeupMatElement;
+    new (): HTMLSmeupMatElement;
+  };
+
   interface HTMLElementTagNameMap {
     'kup-matrix': HTMLKupMatrixElement
     'kup-label': HTMLKupLabelElement
+    'smeup-mat': HTMLSmeupMatElement
   }
 
   interface ElementTagNameMap {
     'kup-matrix': HTMLKupMatrixElement;
     'kup-label': HTMLKupLabelElement;
+    'smeup-mat': HTMLSmeupMatElement;
   }
 
 

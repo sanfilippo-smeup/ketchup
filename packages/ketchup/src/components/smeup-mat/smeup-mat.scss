@@ -1,0 +1,32 @@
+table {
+  width: calc(100% - 2rem);
+  border-collapse: collapse;
+
+  tr {
+    td,
+    th {
+      padding: 8px 5px;
+      border: 1px solid black;
+    }
+  }
+
+  thead {
+    th {
+      &.sortable {
+        cursor: pointer;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      &.selected {
+        background: lightcoral;
+      }
+
+      &:hover {
+        background: #ccc;
+      }
+    }
+  }
+}
