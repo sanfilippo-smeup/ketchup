@@ -1,3 +1,7 @@
 module.exports = {
-  lintOnSave: false
-}
+  lintOnSave: false,
+  baseUrl: "./",
+  devServer: {
+    port: 4000
+  }
+};

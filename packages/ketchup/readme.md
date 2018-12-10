@@ -16,27 +16,29 @@ The prefix for these commands is 'k:'. Example:
 yarn run k:build
 ```
 
-Starts local webserver:
-```bash
+## Commands
+
+### Starts local webserver
+```
 npm start
 ```
 
-Builds application for production.
+### Builds application for production
 
 Include compilation both for 'start' command and  for components exportation.
-
-```bash
+```
 npm run build
 ```
 
-To run the unit tests once, run:
+### Run unit tests
+```
+npm run test:unit
+```
+
+### Run unit tests and watch for file changes during development
 
 ```
-npm test
-```
+npm run test:unit:watch
 
-To run the unit tests and watch for file changes during development, run:
 
-```
-npm run test.watch
-```
+

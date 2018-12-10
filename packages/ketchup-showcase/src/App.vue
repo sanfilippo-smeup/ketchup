@@ -1,13 +1,14 @@
 <template>
   <div id="app">
+    <p>Test<p/>
+    <kup-label text="Prova"/>
+    <app-home/>
+    <kup-matrix/>    
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
     <router-view/>
-    <kup-label text="prova"/>
-    <app-home/>
-    <kup-matrix/>
   </div>
 </template>
 

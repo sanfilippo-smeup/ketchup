@@ -22,37 +22,32 @@ The prefix for these commands is 'kup:'. Example:
 yarn run kup:serve
 ```
 
-### Comandi
+## Commands
 
-Compiles and hot-reloads for development
+### Compiles and hot-reloads for development
 ```
-yarn run serve
-```
-
-Compiles and minifies for production
-```
-yarn run build
+npm run serve
 ```
 
-Run your tests
+### Compiles and minifies for production
 ```
-yarn run test
+npm run build
 ```
-
-Lints and fixes files
+### Lints and fixes files
 ```
-yarn run lint
-```
-
-Run your end-to-end tests
-```
-yarn run test:e2e
+npm run lint
 ```
 
-Run your unit tests
+### Run your e2e tests with a served app
 ```
-yarn run test:unit
-```
+npm run cy:open
 
-### Customize configuration
-See [Vue CLI Configuration Reference](https://cli.vuejs.org/config/).
+```
+### Start the server and run your e2e tests
+```
+npm run local:open
+```
+### Start ther server and run your e2e headlessly
+```
+npm run local:run
+```
