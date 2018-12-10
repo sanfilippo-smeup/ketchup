@@ -5,13 +5,15 @@
   "scripts": {
     "k:build": "lerna run build --scope ketchup --stream",
     "k:start": "lerna run start --scope ketchup --stream",
-    "k:test": "lerna run test --scope ketchup --stream",
-    "k:test.watch": "lerna run test.watch --scope ketchup --stream",
+    "k:test:unit": "lerna run test:unit --scope ketchup --stream",
+    "k:test:unit:watch": "lerna run test:unit:watch --scope ketchup --stream",
     "ksc:serve": "lerna run serve --scope ketchup-showcase --stream",
     "ksc:build": "lerna run build --scope ketchup-showcase --stream",
     "ksc:lint": "lerna run lint --scope ketchup-showcase --stream",
-    "ksc:test:e2e": "lerna run test:e2e --scope ketchup-showcase --stream",
-    "ksc:test:unit": "lerna run test:unit --scope ketchup-showcase --stream"
+    "ksc:test:cy:open": "lerna run test:cy:open --scope ketchup-showcase --stream",
+    "ksc:test:cy:run": "lerna run test:cy:run --scope ketchup-showcase --stream",
+    "ksc:test:e2e:open": "lerna run test:e2e:open --scope ketchup-showcase --stream",
+    "ksc:test:e2e:run": "lerna run test:e2e:run --scope ketchup-showcase --stream"
   },
   "devDependencies": {
     "lerna": "^3.4.3"

@@ -19,7 +19,7 @@ List of available commands inside package.json.
 These commands can be run from within the project's root through npm.
 The prefix for these commands is 'kup:'. Example:
 ```
-yarn run kup:serve
+npm run kup:serve
 ```
 
 ## Commands
@@ -38,16 +38,22 @@ npm run build
 npm run lint
 ```
 
-### Run your e2e tests with a served app
+### Run your e2e tests interactively with a served app
 ```
 npm run cy:open
 
 ```
-### Start the server and run your e2e tests
+### Run your e2e tests headlessly with a served app
 ```
-npm run local:open
+npm run cy:run
+
+```
+
+### Start the server and run your e2e tests interactively
+```
+npm run test:e2e:open
 ```
 ### Start ther server and run your e2e headlessly
 ```
-npm run local:run
+npm run test:e2e:run
 ```

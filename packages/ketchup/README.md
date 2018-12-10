@@ -13,7 +13,7 @@ List of available commands inside package.json.
 These commands can be run from within the project's root through npm.
 The prefix for these commands is 'k:'. Example:
 ```
-yarn run k:build
+npm run k:build
 ```
 
 ## Commands

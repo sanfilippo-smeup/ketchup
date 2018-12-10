@@ -1,8 +1,6 @@
 # KetchUP Monorepo
 
-Show case built with Vue CLI.
-
-Components created with Stencil.js.
+Monorepo for KetchUP project.
 
 ## Project setup
 
@@ -22,11 +20,10 @@ To verify the installation.
 
 #### 3. Lerna
 
-Installa Lerna. From project's root run:
+Install Lerna. From project's root run:
 ```
 npm install
 ```
-
 In this way Lerna will be installed as a dependency inside the project,
 and it's not necessary to install it globally.
 
