@@ -1,51 +1,52 @@
 # KetchUP Monorepo
 
-Show case realizzato con Vue CLI.
+Show case built with Vue CLI.
 
-Componenti realizzati con Stencil.js.
+Components created with Stencil.js.
 
-## Setup progetto
+## Project setup
 
-#### 1. Scaricare il progetto
+#### 1. Download the project
 
-Scaricare il progetto da GitHub in locale ed aprire un terminale nella sua root.
-Nota: il terminale deve avere accesso ai comandi di Git per funzionare.
+Download project from GitHub and open a terminal inside its root.
+Note: the terminal must have access to Git commands for it to work correctly.
 
-#### 2. Yarn
-Il primo passaggio è quello di essere sicuri di avere Yarn come package manager per Node installato sulla propria macchina.
+#### 2. npm 6
+First thing to do is to be sure to have installed npm 6 or higher, since it's mandatory to develop with Stancil.
 
-Seguire la [guida per l'installazione](https://yarnpkg.com/lang/en/docs/install/) e poi lanciare:
+Follow the [installation guide](https://www.npmjs.com/get-npm) and run:
 ```
-yarn -v
+npm -v
 ``` 
+To verify the installation.
 
 #### 3. Lerna
 
-Installare Lerna nel progetto. Sempre dalla root di progetto lanciare:
+Installa Lerna. From project's root run:
 ```
-yarn install
+npm install
 ```
 
-In questo modo Lerna viene installato come dipendenza del progetto
-e si può evitare di installarlo globalmente.
+In this way Lerna will be installed as a dependency inside the project,
+and it's not necessary to install it globally.
 
-A questo punto lanciare:
+Then run:
 ```
 lerna bootstrap
 ```
-Questo comando potrebbe impiegarci un po' di tempo.
-Installerà le dipendenze di tutti i progetti dentro la cartella 'packages'
-e provvederà a fare il SymLink dei pacchetti del monorepo che sono uno dipendenza dell'altro.
+This command will take some time.
+It will install all dependencies in all packages inside the folder 'packages'
+and will symlink those packages inside the monorepo which are dependencies of one another.
 
-In questo progetto, Lerna è configurato in modalità independente, permettendo di aggiornare
-o cambiare a piacimento le dipendenze dei vari pacchetti. 
+In this project, Lerna has been configured to run in independent mode,
+allowing the user to update or change the different packages and dependencies.
 
-#### 4. Sviluppare
+#### 4. Developing
 
-I comandi contenuti nei package.json dei progetti dentro alla cartella packages sono
-eseguibili da Lerna.
+Commands inside the different package.json of the 'packages' folder should be reported inside the main package.json
+so that they can be executed also by Lerna. 
 
-Per vedere quali comandi sono disponibili, aprire il package.json nella root all voce 'scripts'.
-Sono lanciabili tramite Yarn.
+To see which command are available, open package.json in the root package and take a look at the scripts object. 
+Use 'npm run' to execute them
 
-Maggiori dettagli sui comandi si trovano nei readme dei progetti.
+Other details can be found inside the readme of the packages.

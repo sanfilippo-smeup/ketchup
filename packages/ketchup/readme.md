@@ -1,29 +1,29 @@
 # KetchUP
 
-Libreria di webcomponents basata su Stencyl.js
+Webcomponents library based on Stencil.js
 
-## Configurazione della libreria
+## Library configuration
 
 https://stenciljs.com/docs/distribution
 https://stenciljs.com/docs/config
 
 ## Scripts
-Lista dei comandi scripts disponibili nel package.json.
+List of available commands inside package.json.
 
-Tali comandi sono lanciabili anche dalla root del progetto tramite il proprio package manager.
-Il prefisso per questi comandi è 'k:'. Esempio:
+These commands can be run from within the project's root through npm.
+The prefix for these commands is 'k:'. Example:
 ```
 yarn run k:build
 ```
 
-Lancia il webserver di sviluppo locale:
-
+Starts local webserver:
 ```bash
 npm start
 ```
 
-Effettua il build dell'applicazione per la produzione.
-Include compilazione per il comando 'start' e per l'utilizzo con l'esportazione.
+Builds application for production.
+
+Include compilation both for 'start' command and  for components exportation.
 
 ```bash
 npm run build
