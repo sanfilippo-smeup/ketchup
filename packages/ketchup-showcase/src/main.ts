@@ -3,7 +3,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import './registerServiceWorker';
-import { defineCustomElements } from 'ketchup//dist/loader';
+import { defineCustomElements } from 'ketchup/dist/loader';
 
 Vue.config.productionTip = false;
 Vue.config.ignoredElements = [/[kup|app]-\w*/];

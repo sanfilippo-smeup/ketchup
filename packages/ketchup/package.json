@@ -26,6 +26,10 @@
   "license": "MIT",
   "devDependencies": {
     "@stencil/sass": "^0.1.1",
+    "@types/puppeteer": "1.6.4",
+    "jest": "23.6.0",
+    "jest-cli": "23.6.0",
+    "puppeteer": "1.8.0",
     "workbox-build": "3.4.1"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "ketchup-root",
-  "npmClient": "yarn",
+  "npmClient": "npm",
   "private": true,
   "scripts": {
     "k:build": "lerna run build --scope ketchup --stream",
@@ -13,7 +13,6 @@
     "ksc:test:e2e": "lerna run test:e2e --scope ketchup-showcase --stream",
     "ksc:test:unit": "lerna run test:unit --scope ketchup-showcase --stream"
   },
-  "version": "independent",
   "devDependencies": {
     "lerna": "^3.4.3"
   }
