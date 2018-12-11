@@ -35,9 +35,6 @@ This command will take some time.
 It will install all dependencies in all packages inside the folder 'packages'
 and will symlink those packages inside the monorepo which are dependencies of one another.
 
-In this project, Lerna has been configured to run in independent mode,
-allowing the user to update or change the different packages and dependencies.
-
 #### 4. Developing
 
 Commands inside the different package.json of the 'packages' folder should be reported inside the main package.json

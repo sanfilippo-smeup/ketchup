@@ -28,7 +28,7 @@ export const config: Config = {
               "jest-junit",
               {
                 output: "target/test/unit/junit/junit.xml",
-                classNameTemplate: "VueJsf unit - {classname}",
+                classNameTemplate: "K unit - {classname}",
                 titleTemplate: "{classname} - {title}"
               }
             ],

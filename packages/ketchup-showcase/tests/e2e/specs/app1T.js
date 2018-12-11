@@ -1,4 +1,4 @@
-describe("Showcase e2e - sample test 1", () => {
+describe("Ksc e2e - sample test 1", () => {
   it("Visits the app root url 1", () => {
     cy.visit("/");
     cy.get("#app")

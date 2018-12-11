@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "k:build": "lerna run build --scope ketchup --stream",
+    "k:build:watch": "lerna run build:watch --scope ketchup --stream",
     "k:start": "lerna run start --scope ketchup --stream",
     "k:test:unit": "lerna run test:unit --scope ketchup --stream",
     "k:test:unit:watch": "lerna run test:unit:watch --scope ketchup --stream",
