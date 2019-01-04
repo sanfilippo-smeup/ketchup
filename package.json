@@ -1,0 +1,45 @@
+{
+  "name": "test-scaffhold-vue",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/KetchUP.common.js",
+  "types": "src/components/index.ts",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "build:comp:k-button-panel": "vue-cli-service build --target wc --name k-button-panel ./src/components/KButtonPanel/KButtonPanel.vue --dest webcomp/k-button-panel",
+    "build:comp:v-k-input": "vue-cli-service build --target wc --name v-k-input ./src/components/KInput/KInput.vue --dest webcomp/v-k-input",
+    "build:comp:k-input": "vue-cli-service build --target wc --name k-input ./src/components/KInput/KInput.vue --dest webcomp/k-input",
+    "build:dist": "vue-cli-service build --target lib --name KetchUP ./src/components/index.ts",
+    "build:lib": "node scripts/build-lib.js",
+    "lint": "vue-cli-service lint",
+    "test:e2e": "vue-cli-service test:e2e",
+    "test:unit": "vue-cli-service test:unit"
+  },
+  "dependencies": {
+    "vue": "^2.5.17",
+    "vue-class-component": "^6.0.0",
+    "vue-property-decorator": "^7.0.0",
+    "vuetify": "^1.3.15"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@types/jest": "^23.1.4",
+    "@vue/cli-plugin-babel": "^3.0.5",
+    "@vue/cli-plugin-e2e-cypress": "^3.0.5",
+    "@vue/cli-plugin-typescript": "^3.0.5",
+    "@vue/cli-plugin-unit-jest": "^3.0.5",
+    "@vue/cli-service": "^3.0.5",
+    "@vue/test-utils": "^1.0.0-beta.20",
+    "babel-core": "7.0.0-bridge.0",
+    "cross-env": "^5.2.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.0.1",
+    "shelljs": "^0.8.3",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "ts-jest": "^23.0.0",
+    "typescript": "^3.0.0",
+    "vue-template-compiler": "^2.5.17"
+  }
+}

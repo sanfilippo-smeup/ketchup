@@ -1,0 +1,72 @@
+<meta charset="utf-8">
+<title>k-button-panel demo</title>
+<script src="https://unpkg.com/vue"></script>
+<script src="./k-button-panel.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.materialdesignicons.com/3.2.89/css/materialdesignicons.min.css"/>
+
+<k-button-panel id="asd" fillspace="true"></k-button-panel>
+
+<script>
+    var demoProps = {
+        buttons : [
+            {
+                id: 1,
+                //icon: 'mdi mdi-circle',
+                text: 'Click me',
+            },
+            {
+                id: 2,
+                icon: 'mdi mdi-home',
+                iconColor: 'red',
+                name: 'fool',
+                text: 'Click me 2',
+            },
+            {
+                id: 3,
+                icon: 'mdi mdi-circle',
+                text: 'Click me 3',
+            },
+            {
+                id: 4,
+                icon: 'mdi mdi-home',
+                iconColor: 'red',
+                name: 'fool',
+                text: 'Click me 4',
+            },
+            {
+                id: 5,
+                icon: 'mdi mdi-circle',
+                text: 'Click me 5',
+            },
+            {
+                id: 6,
+                icon: 'mdi mdi-home',
+                iconColor: 'red',
+                name: 'fool',
+                text: 'Click me 6',
+            },
+        ],
+        bold : false,
+        backgroundColor : '#4e908f',
+        color : '#ffffff',
+        columns : 2,
+        fillspace : false,
+        flat : false,
+        isMenu : false,
+        horizontal : true,
+        horizontalAlignment : 'flex-start',
+        menuLabel : 'Menu',
+        outline : false,
+        selectionColor : '#ffc107',
+        showSelection : false,
+        rounded : false,
+        textAlign : 'center',
+        textMode : 'normal',
+    };
+
+    var Demo = document.querySelector('#asd');
+
+    Object.keys(demoProps).forEach(function(key,index) {
+        Demo[key] = demoProps[key];
+    });
+</script>
