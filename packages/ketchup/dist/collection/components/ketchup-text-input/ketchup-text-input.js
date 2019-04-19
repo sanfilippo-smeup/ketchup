@@ -1,23 +1,56 @@
 export class KetchupTextInput {
     constructor() {
+        /**
+         * Marks the field as clearable, allowing an icon to delete its content
+         */
         this.initialValue = '';
+        /**
+         * Marks the field as clearable, allowing an icon to delete its content
+         */
         this.isClearable = false;
+        /**
+         * Label to describe the radio group
+         */
         this.label = '';
+        /**
+         * The max length of the text field.
+         * Default value copied from here: https://www.w3schools.com/tags/att_input_maxlength.asp
+         */
         this.maxLength = 524288;
+        //-- Validating props --
+        //---- Internal state ----
         this.value = '';
+        //-- Constants --
         this.classInputText = 'ketchup-input-text';
     }
+    //---- Lifecycle Hooks  ----
     componentWillLoad() {
+        // Sets initial value inside the element
         this.value = this.initialValue;
     }
+    //---- Public Methods ----
+    /**
+     * Triggers the focus event on the input text
+     * @method triggerFocus
+     */
     triggerFocus() {
+        // For focus issues, maybe have a look here
+        // https://github.com/ionic-team/stencil/issues/180
+        // https://github.com/ionic-team/stencil/issues/1008
         this.inputEl.focus();
         this.textInput.focus();
     }
+    //---- Events and handlers ----
+    /**
+     * Clear the current content inside the the text input
+     */
     onClearClick() {
         this.value = '';
         setTimeout(() => this.triggerFocus(), 10);
     }
+    /**
+     * Listens for keydown events to get when 'Enter' is pressed, firing a submit event.
+     */
     onKeyDown(event) {
         if (event.key === 'Enter') {
             event.preventDefault();
@@ -50,6 +83,7 @@ export class KetchupTextInput {
         });
         this.value = target.value;
     }
+    //---- Rendering functions ----
     render() {
         const containerClass = this.classInputText + '__container';
         return (h("div", { class: containerClass + (this.isClearable ? ' ' + containerClass + '--clearable' : '') },

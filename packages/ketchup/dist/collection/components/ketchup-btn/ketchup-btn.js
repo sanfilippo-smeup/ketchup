@@ -1,5 +1,6 @@
 export class KetchupBtn {
     constructor() {
+        // setup props
         this.config = {};
     }
     onBtnClicked(event) {
@@ -14,6 +15,7 @@ export class KetchupBtn {
                 this.buttons.forEach((btn, index) => {
                     const mod = index % this.config.columns;
                     if (mod === 0) {
+                        // new row
                         buttonsInGrid.push([]);
                     }
                     buttonsInGrid[buttonsInGrid.length - 1].push(btn);
@@ -57,6 +59,11 @@ export class KetchupBtn {
         if (!this.config.horizontal) {
             compClass += ' vertical';
         }
+        //- Composes the style of the button -
+        // TODO this is how currently JSX can set custom CSS vars. Check periodically for a better way
+        // It simply sets them in style inside the html. Not the most elegant way,
+        // https://medium.com/geckoboard-under-the-hood/how-we-made-our-product-more-personalized-with-css-variables-and-react-b29298fde608
+        // https://medium.com/fbdevclagos/how-to-leverage-styled-components-and-css-variables-to-build-truly-reusable-components-in-react-4bbf50467666
         const commonStyle = {};
         if (this.config.btnStyle) {
             if (this.config.btnStyle.fontColor) {

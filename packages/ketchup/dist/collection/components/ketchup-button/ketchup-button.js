@@ -56,6 +56,7 @@ export class KetchupButton {
         if (this._isHint()) {
             title = this.label;
         }
+        // TODO: check if the div element can be removed by passing JSX an array of elements
         return [
             h("link", { href: this.iconUrl, rel: "stylesheet", type: "text/css" }),
             h("button", { class: btnClass, title: title, onClick: () => this.onBtnClickedHandler() },

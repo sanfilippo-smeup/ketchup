@@ -116,6 +116,30 @@
       "shadow": true
     },
     {
+      "tag": "ketchup-chart",
+      "dependencies": [],
+      "componentClass": "KetchupChart",
+      "componentPath": "components/ketchup-chart/ketchup-chart.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/ketchup-chart/ketchup-chart.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "config",
+          "attr": "config"
+        },
+        {
+          "name": "data",
+          "attr": "data"
+        }
+      ],
+      "shadow": true
+    },
+    {
       "tag": "ketchup-combo",
       "dependencies": [
         "ketchup-portal",

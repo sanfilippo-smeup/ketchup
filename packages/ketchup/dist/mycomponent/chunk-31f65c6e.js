@@ -1,1 +1,21 @@
-function e(e,n,r){return(e||"")+(n?` ${n}`:"")+(r?` ${r}`:"")}function n(e){return(new Date).getTime()+e.trim().replace(/\s/g,"_")}function r(e,n){for(;n;){if(console.log(n),n===e)return!0;n=n.parentElement}return!1}export{r as a,n as b,e as c};
+const h = window.mycomponent.h;
+
+function format(first, middle, last) {
+    return ((first || '') +
+        (middle ? ` ${middle}` : '') +
+        (last ? ` ${last}` : ''));
+}
+function generateUniqueId(field) {
+    return (new Date()).getTime() + field.trim().replace(/\s/g, '_');
+}
+function eventFromElement(element, eventSource) {
+    while (eventSource) {
+        console.log(eventSource);
+        if (eventSource === element)
+            return true;
+        eventSource = eventSource.parentElement;
+    }
+    return false;
+}
+
+export { generateUniqueId as a, eventFromElement as b, format as c };

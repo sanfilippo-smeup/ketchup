@@ -1,7 +1,16 @@
 export class KetchupTextInput {
     constructor() {
+        /**
+         * The label to show when button isButton is active
+         */
         this.label = 'Apri in nuova finestra';
+        /**
+         * If true, the ketchup-html takes the shape of a button
+         */
         this.isButton = false;
+        /**
+         * The address which must be referenced by the iframe
+         */
         this.src = '';
     }
     onFrameError() {
@@ -10,6 +19,7 @@ export class KetchupTextInput {
     onFrameLoaded() {
         this.ketchupHtmlLoaded.emit();
     }
+    //---- Rendering functions ----
     render() {
         return !this.isButton ?
             h("iframe", { class: "ketchup-frame", onError: this.onFrameError.bind(this), onLoad: this.onFrameLoaded.bind(this), src: this.src }) :

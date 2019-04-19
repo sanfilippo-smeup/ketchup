@@ -1,5 +1,5 @@
 # For now this has been commented to allow remote npm installation
-#dist/
+dist/
 www/
 
 *~
