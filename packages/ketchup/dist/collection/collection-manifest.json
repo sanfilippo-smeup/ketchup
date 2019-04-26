@@ -134,6 +134,7 @@
         },
         {
           "name": "data",
+          "type": "Any",
           "attr": "data"
         }
       ],

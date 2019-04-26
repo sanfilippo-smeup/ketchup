@@ -33,21 +33,46 @@
                 });
             }
         </script>
+
+        <style>
+            .config-panel {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        </style>
     </head>
 
     <body>
-        <div>
-            <label for="colors">Custom colors</label>
-            <input id="colors" type="checkbox" />
-            <br />
-            <label for="size">Custom size (400x400)</label>
-            <input id="size" type="checkbox" />
-            <br />
-            <label for="legend">Legend</label>
-            <input id="legend" type="checkbox" checked />
-            <br />
-            <label for="title">Title</label>
-            <input id="title" type="text" value="" />
+        <div class="config-panel">
+            <div class="field">
+                <label for="colors">Custom colors</label>
+                <input id="colors" type="checkbox" />
+            </div>
+
+            <div>
+                <label for="size">Custom size (400x400)</label>
+                <input id="size" type="checkbox" />
+            </div>
+
+            <div>
+                <label for="legend">Legend</label>
+                <input id="legend" type="checkbox" checked />
+            </div>
+
+            <div>
+                <label for="title">Title</label>
+                <input id="title" type="text" value="" />
+            </div>
+
+            <div>
+                <label for="title-color">Title color</label>
+                <input id="title-color" type="color" value="" />
+            </div>
+
+            <div>
+                <label for="title-size">Title size</label>
+                <input id="title-size" type="number" value="" />
+            </div>
         </div>
         <hr />
 

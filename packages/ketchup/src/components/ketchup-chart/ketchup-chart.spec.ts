@@ -1,5 +1,6 @@
 import { KetchupChart } from './ketchup-chart';
 import { ChartConfig, ChartType } from './ketchup-chart-declarations';
+import { convertColumns, convertRows } from './ketchup-chart-builder';
 
 const dataMock = {
     columns: [
@@ -115,40 +116,40 @@ const configMock: ChartConfig = {
 
 describe('data conversion', () => {
     it('can convert null', () => {
-        const columns = KetchupChart.convertColumns(null, null);
-        const rows = KetchupChart.convertRows(null, null);
+        const columns = convertColumns(null, null);
+        const rows = convertRows(null, null);
 
         expect(columns).toEqual([]);
         expect(rows).toEqual([]);
     });
 
     it('can convert empty objects', () => {
-        const columns = KetchupChart.convertColumns({}, {});
-        const rows = KetchupChart.convertRows({}, []);
+        const columns = convertColumns({}, {});
+        const rows = convertRows({}, []);
 
         expect(columns).toEqual([]);
         expect(rows).toEqual([]);
     });
 
     it('columns conversion', () => {
-        const columns = KetchupChart.convertColumns(dataMock, configMock);
+        const columns = convertColumns(dataMock, configMock);
 
         expect(columns).toEqual(['Col1', 'Col2', 'Col3']);
     });
 
     it('rows conversion (one serie)', () => {
-        const columns = KetchupChart.convertColumns(dataMock, {
+        const columns = convertColumns(dataMock, {
             ...configMock,
             series: ['Col2'],
         });
-        const rows = KetchupChart.convertRows(dataMock, columns);
+        const rows = convertRows(dataMock, columns);
 
         expect(rows).toEqual([['CASFRA', 10], ['DELGIO', 6], ['PARFRA', 5]]);
     });
 
     it('rows conversion (two series)', () => {
-        const columns = KetchupChart.convertColumns(dataMock, configMock);
-        const rows = KetchupChart.convertRows(dataMock, columns);
+        const columns = convertColumns(dataMock, configMock);
+        const rows = convertRows(dataMock, columns);
 
         expect(rows).toEqual([
             ['CASFRA', 10, 100.6],

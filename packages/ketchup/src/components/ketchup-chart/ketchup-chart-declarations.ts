@@ -9,6 +9,8 @@ export interface ChartConfig {
     leg?: boolean;
     stacked?: boolean;
     title?: string;
+    titleColor?: string;
+    titleSize?: string;
 }
 
 export enum ChartType {
