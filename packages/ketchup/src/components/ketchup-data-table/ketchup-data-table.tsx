@@ -14,14 +14,14 @@ import {
     SortMode,
     SortObject,
     Row,
-    Cell,
     TotalMode,
     GenericMap,
     GroupObject,
 } from './ketchup-data-table-declarations';
 
+import { filterRows, groupRows, sortRows } from './ketchup-data-table-helper';
+
 import numeral from 'numeral';
-import moment from 'moment';
 
 @Component({
     tag: 'kup-data-table',
@@ -172,62 +172,12 @@ export class KetchupDataTable {
     }
 
     private getFilteredRows(): Array<any> {
-        if (
-            (this.filters && Object.keys(this.filters).length > 0) ||
-            this.globalFilter
-        ) {
-            const keys = Object.keys(this.filters);
-
-            // filtering rows
-            return this.getRows().filter((r: Row) => {
-                // check global filter
-                if (this.globalFilter) {
-                    let found = false;
-
-                    for (let i = 0; i < this.data.columns.length; i++) {
-                        const c = this.data.columns[i];
-                        const cellValue = r.cells[c.name].value;
-
-                        if (
-                            cellValue
-                                .toLowerCase()
-                                .includes(
-                                    this.globalFilterValue.toLocaleLowerCase()
-                                )
-                        ) {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found) {
-                        return false;
-                    }
-                }
-
-                return (
-                    keys.filter((key) => {
-                        const filterValue = this.filters[key];
-
-                        // getting cell value
-                        const cellValue = r.cells[key];
-                        if (!cellValue || !cellValue.value) {
-                            return false;
-                        }
-
-                        if (
-                            cellValue.value
-                                .toLowerCase()
-                                .includes(filterValue.toLowerCase())
-                        ) {
-                            return true;
-                        }
-                    }).length === keys.length
-                );
-            });
-        }
-
-        return this.getRows();
+        return filterRows(
+            this.getRows(),
+            this.filters,
+            this.globalFilterValue,
+            this.getVisibleColumns().map((c) => c.name)
+        );
     }
 
     private onColumnSort(e: MouseEvent) {
@@ -299,255 +249,51 @@ export class KetchupDataTable {
         this.globalFilterValue = event.detail.value;
     }
 
-    private groupRows(rows: Array<any>): Array<any> {
+    private groupRows(rows: Array<any>): Array<Row> {
         if (!this.isGrouping()) {
             return rows;
         }
 
-        // creating root
-        const groupRows: Array<Row> = [];
+        const groupedRows = groupRows(rows, this.groups);
 
-        rows.forEach((row: Row) => {
-            // getting column name from first group
-            const columnName = this.groups[0].column;
+        this.adjustGroupState(groupedRows);
 
-            // getting row value
-            const cellValue = row.cells[columnName].value;
+        return groupedRows;
+    }
 
-            // check in already in groupedRow
-            let groupRow: Row = null;
-            for (let i = 0; i < groupRows.length; i++) {
-                const currentGroupRow = groupRows[i];
+    private adjustGroupState(rows: Array<Row>): void {
+        if (!rows || rows.length === 0 || !rows[0].hasOwnProperty('group')) {
+            // no grouping
+            return;
+        }
 
-                if (currentGroupRow.group.label === cellValue) {
-                    groupRow = currentGroupRow;
-                    break;
-                }
-            }
+        rows.forEach((r) => this.adjustGroupStateFromRow(r));
+    }
 
-            if (groupRow === null) {
-                // create group row
-                groupRow = {
-                    group: {
-                        column: columnName,
-                        expanded: false,
-                        label: cellValue,
-                        children: [],
-                    },
-                    cells: {},
-                };
+    private adjustGroupStateFromRow(row: Row): void {
+        if (!row || !row.hasOwnProperty('group')) {
+            // not a groping row, nothing to do
+            return;
+        }
 
-                // add group to list
-                groupRows.push(groupRow);
-            }
+        const group = row.group;
 
-            // check if in groupState map
-            const isExpanded = this.groupState[cellValue]
-                ? this.groupState[cellValue].expanded
-                : false;
+        // check if already in group state
+        let groupFromState = this.groupState[group.label];
 
-            groupRow.group.expanded = isExpanded;
+        if (!groupFromState) {
+            // add to state
+            this.groupState[group.label] = group;
+        } else {
+            // update expanded
+            group.expanded = groupFromState.expanded;
+        }
 
-            // add to groupState map
-            this.groupState[cellValue] = {
-                expanded: groupRow.group.expanded,
-            };
-
-            for (let i = 1; i < this.groups.length; i++) {
-                const group = this.groups[i];
-
-                // getting cell value
-                const tempCellValue = row.cells[group.column].value;
-
-                // check if group already exists
-                let tempGroupingRow: Row = null;
-                for (let j = 0; j < groupRow.group.children.length; j++) {
-                    const childGroup = groupRow.group.children[j];
-                    const groupLabel = childGroup.group.label;
-
-                    if (groupLabel === tempCellValue) {
-                        tempGroupingRow = childGroup;
-                        break;
-                    }
-                }
-
-                if (!tempGroupingRow) {
-                    const isExpanded = this.groupState[tempCellValue]
-                        ? this.groupState[tempCellValue].expanded
-                        : false;
-
-                    tempGroupingRow = {
-                        cells: {},
-                        group: {
-                            column: group.column,
-                            children: [],
-                            expanded: isExpanded,
-                            label: tempCellValue,
-                        },
-                    };
-                    groupRow.group.children.push(tempGroupingRow);
-
-                    // add to groupState map
-                    this.groupState[tempCellValue] = {
-                        expanded: tempGroupingRow.group.expanded,
-                    };
-                }
-
-                groupRow = tempGroupingRow;
-            }
-
-            // adding row
-            groupRow.group.children.push(row);
-        });
-
-        return groupRows;
+        group.children.forEach((child) => this.adjustGroupStateFromRow(child));
     }
 
     private sortRows(rows: Array<any>): Array<any> {
-        if (this.sort.length === 0) {
-            // no sort -> return rows as they are
-            return rows;
-        }
-
-        // check multiple sort
-        const isMultiSort = this.sort.length > 1;
-
-        // sorting rows
-        return rows.sort((r1: Row, r2: Row) => {
-            if (isMultiSort) {
-                for (let i = 0; i < this.sort.length; i++) {
-                    const sortObj = this.sort[i];
-
-                    // TODO refactor with singole sort
-                    // check if grouping row
-                    if (r1.group) {
-                        // sort children
-                        r1.group.children = this.sortRows(r1.group.children);
-                        r2.group.children = this.sortRows(r2.group.children);
-
-                        // check if valid group
-                        if (r1.group.column !== sortObj.column) {
-                            return 0;
-                        }
-
-                        // comparing group
-                        const group1 = r1.group.label;
-                        const group2 = r2.group.label;
-
-                        const sm = sortObj.sortMode === 'A' ? 1 : -1;
-
-                        return sm * group1.localeCompare(group2);
-                    } else {
-                        const cell1: Cell = r1.cells[sortObj.column];
-                        const cell2: Cell = r2.cells[sortObj.column];
-
-                        const compare = this.compareCell(
-                            cell1,
-                            cell2,
-                            sortObj.sortMode
-                        );
-
-                        if (compare !== 0) {
-                            return compare;
-                        }
-                    }
-                }
-
-                // same row
-                return 0;
-            } else {
-                const sortObj = this.sort[0];
-
-                // check if grouping row
-                if (r1.group) {
-                    // sort children
-                    r1.group.children = this.sortRows(r1.group.children);
-                    r2.group.children = this.sortRows(r2.group.children);
-
-                    // check if valid group
-                    if (r1.group.column !== sortObj.column) {
-                        return 0;
-                    }
-
-                    // comparing group
-                    const group1 = r1.group.label;
-                    const group2 = r2.group.label;
-
-                    const sm = sortObj.sortMode === 'A' ? 1 : -1;
-
-                    return sm * group1.localeCompare(group2);
-                } else {
-                    const cell1: Cell = r1.cells[sortObj.column];
-                    const cell2: Cell = r2.cells[sortObj.column];
-
-                    return this.compareCell(cell1, cell2, sortObj.sortMode);
-                }
-            }
-        });
-    }
-
-    private compareCell(cell1: Cell, cell2: Cell, sortMode: SortMode): number {
-        const sm = sortMode === 'A' ? 1 : -1;
-
-        const obj1 = cell1.obj;
-        const obj2 = cell2.obj;
-
-        if (!(obj1.t === obj2.t && obj1.p === obj2.p)) {
-            let compare = obj1.t.localeCompare(obj2.t);
-            if (compare === 0) {
-                compare = obj1.p.localeCompare(obj2.p);
-            }
-            return compare;
-        }
-
-        // number
-        if ('NR' === obj1.t) {
-            const n1: number = numeral(obj1.k).value();
-            const n2: number = numeral(obj2.k).value();
-
-            if (n1 === n2) {
-                return 0;
-            }
-
-            if (n1 > n2) {
-                return sm * 1;
-            } else {
-                return sm * -1;
-            }
-        }
-
-        // date
-        if ('D8' === obj1.t) {
-            let m1: moment.Moment;
-            let m2: moment.Moment;
-
-            if (obj1.p === '*YYMD') {
-                m1 = moment(obj1.k, 'YYYYMMDD');
-                m2 = moment(obj2.k, 'YYYYMMDD');
-            } else if (obj1.p === '*DMYY') {
-                m1 = moment(obj1.k, 'DDMMYYYY');
-                m2 = moment(obj2.k, 'DDMMYYYY');
-            } else {
-                // no valid format -> check via k
-                return obj1.k.localeCompare(obj2.k);
-            }
-
-            if (m1.isSame(m2)) {
-                return 0;
-            }
-
-            if (m1.isBefore(m2)) {
-                return sm * -1;
-            } else {
-                return sm * 1;
-            }
-        }
-
-        // sort by cell value
-        let value1 = cell1.value;
-        let value2 = cell2.value;
-
-        return sm * value1.localeCompare(value2);
+        return sortRows(rows, this.sort);
     }
 
     private paginateRows(rows: Array<any>): Array<any> {
