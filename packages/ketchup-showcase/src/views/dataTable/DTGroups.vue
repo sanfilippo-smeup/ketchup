@@ -9,7 +9,20 @@ h3 {
     <h1>Filters</h1>
 
     <h3>Group on continent</h3>
-    <kup-data-table :data.prop="data" :groups.prop="groups"></kup-data-table>
+    <kup-data-table
+      :data.prop="data"
+      :groups.prop="group1"
+      :showFilters.prop="true"
+    ></kup-data-table>
+
+    <h3>Hidden group on continent</h3>
+    <kup-data-table :data.prop="data" :groups.prop="group2"></kup-data-table>
+
+    <h3>Group on continent and state</h3>
+    <kup-data-table :data.prop="data" :groups.prop="group3"></kup-data-table>
+
+    <h3>Hidden group on continent and state</h3>
+    <kup-data-table :data.prop="data" :groups.prop="group4"></kup-data-table>
   </div>
 </template>
 
@@ -24,9 +37,33 @@ export default {
       data: {
         ...groupDataTable,
       },
-      groups: [
+      group1: [
         {
           column: 'FLD1',
+        },
+      ],
+      group2: [
+        {
+          column: 'FLD1',
+          visible: false,
+        },
+      ],
+      group3: [
+        {
+          column: 'FLD1',
+        },
+        {
+          column: 'FLD2',
+        },
+      ],
+      group4: [
+        {
+          column: 'FLD1',
+          visible: false,
+        },
+        {
+          column: 'FLD2',
+          visible: false,
         },
       ],
     };

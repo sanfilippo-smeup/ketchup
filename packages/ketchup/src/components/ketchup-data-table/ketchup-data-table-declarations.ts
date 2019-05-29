@@ -10,6 +10,7 @@ export interface Row {
     };
 
     group?: {
+        column: string;
         expanded: boolean;
         label: string;
         children: Array<Row>;

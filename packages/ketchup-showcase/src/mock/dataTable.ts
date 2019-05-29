@@ -536,6 +536,11 @@ export const groupDataTable = {
       title: 'State',
       size: 10,
     },
+    {
+      name: 'FLD3',
+      title: 'City',
+      size: 10,
+    },
   ],
   rows: [
     {
@@ -555,6 +560,14 @@ export const groupDataTable = {
             k: 'Italy',
           },
           value: 'Italy',
+        },
+        FLD3: {
+          obj: {
+            t: '',
+            p: '',
+            k: 'Rome',
+          },
+          value: 'Rome',
         },
       },
     },
@@ -576,6 +589,14 @@ export const groupDataTable = {
           },
           value: 'France',
         },
+        FLD3: {
+          obj: {
+            t: '',
+            p: '',
+            k: 'Paris',
+          },
+          value: 'Paris',
+        },
       },
     },
     {
@@ -595,6 +616,14 @@ export const groupDataTable = {
             k: 'Spain',
           },
           value: 'Spain',
+        },
+        FLD3: {
+          obj: {
+            t: '',
+            p: '',
+            k: 'Madrid',
+          },
+          value: 'Madrid',
         },
       },
     },
@@ -616,6 +645,14 @@ export const groupDataTable = {
           },
           value: 'California',
         },
+        FLD3: {
+          obj: {
+            t: '',
+            p: '',
+            k: 'Los Angeles',
+          },
+          value: 'Los Angeles',
+        },
       },
     },
     {
@@ -635,6 +672,14 @@ export const groupDataTable = {
             k: 'Florida',
           },
           value: 'Florida',
+        },
+        FLD3: {
+          obj: {
+            t: '',
+            p: '',
+            k: 'Miami',
+          },
+          value: 'Miami',
         },
       },
     },
@@ -656,6 +701,14 @@ export const groupDataTable = {
           },
           value: 'Texas',
         },
+        FLD3: {
+          obj: {
+            t: '',
+            p: '',
+            k: 'Austin',
+          },
+          value: 'Austin',
+        },
       },
     },
     {
@@ -675,6 +728,14 @@ export const groupDataTable = {
             k: 'Japan',
           },
           value: 'Japan',
+        },
+        FLD3: {
+          obj: {
+            t: '',
+            p: '',
+            k: 'Tokyo',
+          },
+          value: 'Tokyo',
         },
       },
     },
@@ -696,6 +757,14 @@ export const groupDataTable = {
           },
           value: 'China',
         },
+        FLD3: {
+          obj: {
+            t: '',
+            p: '',
+            k: 'Beijing',
+          },
+          value: 'Beijing',
+        },
       },
     },
     {
@@ -715,6 +784,14 @@ export const groupDataTable = {
             k: 'India',
           },
           value: 'India',
+        },
+        FLD3: {
+          obj: {
+            t: '',
+            p: '',
+            k: 'New Delhi',
+          },
+          value: 'New Delhi',
         },
       },
     },
