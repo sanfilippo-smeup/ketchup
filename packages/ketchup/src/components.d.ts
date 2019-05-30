@@ -187,6 +187,7 @@ export namespace Components {
     'filters': GenericMap;
     'globalFilter': boolean;
     'groups': Array<GroupObject>;
+    'multiSelection': boolean;
     'paginatorPos': PaginatorPos;
     'rowsPerPage': number;
     'selectRow': number;
@@ -208,10 +209,11 @@ export namespace Components {
     'filters'?: GenericMap;
     'globalFilter'?: boolean;
     'groups'?: Array<GroupObject>;
+    'multiSelection'?: boolean;
     /**
     * When a row is selected
     */
-    'onKupRowSelected'?: (event: CustomEvent<{ row: Row }>) => void;
+    'onKupRowSelected'?: (event: CustomEvent<Array<Row>>) => void;
     'paginatorPos'?: PaginatorPos;
     'rowsPerPage'?: number;
     'selectRow'?: number;

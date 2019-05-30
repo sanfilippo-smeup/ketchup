@@ -78,6 +78,9 @@ export class KetchupDataTable {
     @Prop()
     groups: Array<GroupObject> = [];
 
+    @Prop()
+    multiSelection = false;
+
     @State()
     private globalFilterValue = '';
 
@@ -88,7 +91,7 @@ export class KetchupDataTable {
     private currentRowsPerPage = 10;
 
     @State()
-    private selectedRow: Row = null;
+    private selectedRows: Array<Row> = null;
 
     @State()
     private groupState: {
@@ -102,6 +105,8 @@ export class KetchupDataTable {
         this.currentRowsPerPage = newValue;
     }
 
+    private renderedRows: Array<Row> = [];
+
     /**
      * When a row is selected
      */
@@ -111,7 +116,7 @@ export class KetchupDataTable {
         cancelable: false,
         bubbles: true,
     })
-    kupRowSelected: EventEmitter<{ row: Row }>;
+    kupRowSelected: EventEmitter<Array<Row>>;
 
     // lifecycle
     componentWillLoad() {
@@ -121,8 +126,9 @@ export class KetchupDataTable {
             const sortedRows = this.sortRows(this.getFilteredRows());
 
             if (this.selectRow <= sortedRows.length) {
-                this.selectedRow = sortedRows[this.selectRow - 1];
-                this.kupRowSelected.emit({ row: this.selectedRow });
+                this.selectedRows = [];
+                this.selectedRows.push(sortedRows[this.selectRow - 1]);
+                this.kupRowSelected.emit(this.selectedRows);
             }
         }
     }
@@ -254,9 +260,46 @@ export class KetchupDataTable {
         this.currentRowsPerPage = detail.newRowsPerPage;
     }
 
-    private onRowClick(row: Row) {
-        this.kupRowSelected.emit({ row });
-        this.selectedRow = row;
+    private onRowClick({ ctrlKey }, row: Row) {
+        if (this.multiSelection) {
+            if (ctrlKey && this.selectedRows) {
+                const index = this.selectedRows.indexOf(row);
+
+                if (index < 0) {
+                    // adding
+                    this.selectedRows = [...this.selectedRows, row];
+                } else {
+                    // removing
+                    this.selectedRows.splice(index, 1);
+                    this.selectedRows = [...this.selectedRows];
+                }
+            } else {
+                this.selectedRows = [row];
+            }
+        } else {
+            this.selectedRows = [row];
+        }
+
+        this.kupRowSelected.emit(this.selectedRows);
+    }
+
+    private onRowCheckboxSelection({ target }, row: Row) {
+        if (target.checked) {
+            if (this.selectedRows) {
+                this.selectedRows = [...this.selectedRows, row];
+            } else {
+                this.selectedRows = [row];
+            }
+
+            this.kupRowSelected.emit(this.selectedRows);
+        } else {
+            const index = this.selectedRows.indexOf(row);
+
+            if (index >= 0) {
+                this.selectedRows.splice(index, 1);
+                this.selectedRows = [...this.selectedRows];
+            }
+        }
     }
 
     private onRowExpand(row: Row) {
@@ -268,6 +311,16 @@ export class KetchupDataTable {
 
         // changing group state to trigger rendering
         this.groupState = { ...this.groupState };
+    }
+
+    private onSelectAll({ target }) {
+        if (target.checked) {
+            // select all rows
+            this.selectedRows = this.renderedRows;
+        } else {
+            // deselect all rows
+            this.selectedRows = [];
+        }
     }
 
     // utility methods
@@ -407,7 +460,23 @@ export class KetchupDataTable {
             );
         });
 
-        return dataColumns;
+        let multiSelectColumn = null;
+        if (this.multiSelection) {
+            const style = {
+                width: '30px',
+                margin: '0 auto',
+            };
+            multiSelectColumn = (
+                <th style={style}>
+                    <input
+                        type="checkbox"
+                        onChange={(e) => this.onSelectAll(e)}
+                    />
+                </th>
+            );
+        }
+
+        return [multiSelectColumn, ...dataColumns];
     }
 
     renderFooter(
@@ -491,21 +560,43 @@ export class KetchupDataTable {
                     }
                 }
 
+                const cell = row.cells[name];
+
                 return (
-                    <td>
+                    <td style={cell.style}>
                         {indend}
-                        {row.cells[name].value}
+                        {cell.value}
                     </td>
                 );
             });
 
             let rowClass = null;
-            if (this.selectedRow === row) {
+            if (this.selectedRows && this.selectedRows.includes(row)) {
                 rowClass = 'selected';
             }
 
+            let selectRowCell = null;
+            if (this.multiSelection) {
+                selectRowCell = (
+                    <td>
+                        <input
+                            type="checkbox"
+                            checked={
+                                this.selectedRows &&
+                                this.selectedRows.includes(row)
+                            }
+                            onClick={(e) => e.stopPropagation()}
+                            onChange={(e) =>
+                                this.onRowCheckboxSelection(e, row)
+                            }
+                        />
+                    </td>
+                );
+            }
+
             return (
-                <tr class={rowClass} onClick={() => this.onRowClick(row)}>
+                <tr class={rowClass} onClick={(e) => this.onRowClick(e, row)}>
+                    {selectRowCell}
                     {cells}
                 </tr>
             );
@@ -531,6 +622,8 @@ export class KetchupDataTable {
 
         // 5) pagination
         const paginatedRows = this.paginateRows(sortedRows);
+
+        this.renderedRows = paginatedRows;
 
         let rows = null;
         if (paginatedRows.length === 0) {

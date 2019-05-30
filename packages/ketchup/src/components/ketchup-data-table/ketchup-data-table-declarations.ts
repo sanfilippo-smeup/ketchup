@@ -24,6 +24,7 @@ export interface Cell {
         k: string;
     };
     value: string;
+    style?: GenericMap;
 }
 
 export interface GenericMap {
