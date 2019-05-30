@@ -1,3 +1,11 @@
+const fld1Values = ['DELGIO', 'CASFRA', 'PARFRA', 'FIOGIA', 'ZAMCHI'];
+
+const fld2Values = ['Java', 'Javascript', 'Delphi', 'Kotlin', 'Go'];
+
+function getRandomArbitrary(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
 function createDataForPagination(colSize: number, rowSize: number) {
   const columns: any = [];
   for (let i = 0; i < colSize; i++) {
@@ -16,6 +24,7 @@ function createDataForPagination(colSize: number, rowSize: number) {
 
     for (let j = 0; j < columns.length; j++) {
       const cell: any = {};
+
       cell.value = i.toString() + j.toString();
 
       cell.obj = {
@@ -23,6 +32,14 @@ function createDataForPagination(colSize: number, rowSize: number) {
         p: '',
         k: cell.value,
       };
+
+      if (j === 0) {
+        cell.obj.t = '';
+        cell.value = fld1Values[getRandomArbitrary(0, 4)];
+      } else if (j === 1) {
+        cell.obj.t = '';
+        cell.value = fld2Values[getRandomArbitrary(0, 4)];
+      }
 
       currentRow.cells[columns[j].name] = cell;
     }
@@ -524,276 +541,4 @@ export const sortDataTable = {
 
 export const paginateDataTable = createDataForPagination(20, 10000);
 
-export const groupDataTable = {
-  columns: [
-    {
-      name: 'FLD1',
-      title: 'Continent',
-      size: 99,
-    },
-    {
-      name: 'FLD2',
-      title: 'State',
-      size: 10,
-    },
-    {
-      name: 'FLD3',
-      title: 'City',
-      size: 10,
-    },
-  ],
-  rows: [
-    {
-      cells: {
-        FLD1: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Europe',
-          },
-          value: 'Europe',
-        },
-        FLD2: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Italy',
-          },
-          value: 'Italy',
-        },
-        FLD3: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Rome',
-          },
-          value: 'Rome',
-        },
-      },
-    },
-    {
-      cells: {
-        FLD1: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Europe',
-          },
-          value: 'Europe',
-        },
-        FLD2: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'France',
-          },
-          value: 'France',
-        },
-        FLD3: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Paris',
-          },
-          value: 'Paris',
-        },
-      },
-    },
-    {
-      cells: {
-        FLD1: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Europe',
-          },
-          value: 'Europe',
-        },
-        FLD2: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Spain',
-          },
-          value: 'Spain',
-        },
-        FLD3: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Madrid',
-          },
-          value: 'Madrid',
-        },
-      },
-    },
-    {
-      cells: {
-        FLD1: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'America',
-          },
-          value: 'America',
-        },
-        FLD2: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'California',
-          },
-          value: 'California',
-        },
-        FLD3: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Los Angeles',
-          },
-          value: 'Los Angeles',
-        },
-      },
-    },
-    {
-      cells: {
-        FLD1: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'America',
-          },
-          value: 'America',
-        },
-        FLD2: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Florida',
-          },
-          value: 'Florida',
-        },
-        FLD3: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Miami',
-          },
-          value: 'Miami',
-        },
-      },
-    },
-    {
-      cells: {
-        FLD1: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'America',
-          },
-          value: 'America',
-        },
-        FLD2: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Texas',
-          },
-          value: 'Texas',
-        },
-        FLD3: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Austin',
-          },
-          value: 'Austin',
-        },
-      },
-    },
-    {
-      cells: {
-        FLD1: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Asia',
-          },
-          value: 'Asia',
-        },
-        FLD2: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Japan',
-          },
-          value: 'Japan',
-        },
-        FLD3: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Tokyo',
-          },
-          value: 'Tokyo',
-        },
-      },
-    },
-    {
-      cells: {
-        FLD1: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Asia',
-          },
-          value: 'Asia',
-        },
-        FLD2: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'China',
-          },
-          value: 'China',
-        },
-        FLD3: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Beijing',
-          },
-          value: 'Beijing',
-        },
-      },
-    },
-    {
-      cells: {
-        FLD1: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'Asia',
-          },
-          value: 'Asia',
-        },
-        FLD2: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'India',
-          },
-          value: 'India',
-        },
-        FLD3: {
-          obj: {
-            t: '',
-            p: '',
-            k: 'New Delhi',
-          },
-          value: 'New Delhi',
-        },
-      },
-    },
-  ],
-};
+export const groupDataTable = createDataForPagination(10, 3000);

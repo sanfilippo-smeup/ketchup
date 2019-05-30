@@ -6,7 +6,7 @@ h3 {
 
 <template>
   <div>
-    <h1>Filters</h1>
+    <h1>Grouping</h1>
 
     <h3>Group on continent</h3>
     <kup-data-table
@@ -39,30 +39,30 @@ export default {
       },
       group1: [
         {
-          column: 'FLD1',
+          column: 'FLD0',
         },
       ],
       group2: [
         {
-          column: 'FLD1',
+          column: 'FLD0',
           visible: false,
         },
       ],
       group3: [
         {
-          column: 'FLD1',
+          column: 'FLD0',
         },
         {
-          column: 'FLD2',
+          column: 'FLD1',
         },
       ],
       group4: [
         {
-          column: 'FLD1',
+          column: 'FLD0',
           visible: false,
         },
         {
-          column: 'FLD2',
+          column: 'FLD1',
           visible: false,
         },
       ],

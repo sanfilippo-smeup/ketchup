@@ -139,9 +139,7 @@ export class KetchupDataTable {
             return columns.filter((column) => {
                 // check if in group
                 let group = null;
-                for (let i = 0; i < this.groups.length; i++) {
-                    const currentGroup = this.groups[i];
-
+                for (let currentGroup of this.groups) {
                     if (currentGroup.column === column.name) {
                         group = currentGroup;
                         break;
@@ -167,10 +165,6 @@ export class KetchupDataTable {
         return this.data && this.data.rows ? this.data.rows : [];
     }
 
-    private isGrouping() {
-        return this.groups && this.groups.length > 0;
-    }
-
     private getFilteredRows(): Array<any> {
         return filterRows(
             this.getRows(),
@@ -180,9 +174,12 @@ export class KetchupDataTable {
         );
     }
 
-    private onColumnSort(e: MouseEvent) {
-        const columnName: string = (e.target as HTMLElement).dataset.col;
+    private isGrouping() {
+        return this.groups && this.groups.length > 0;
+    }
 
+    // event listeners
+    private onColumnSort({ ctrlKey }: MouseEvent, columnName: string) {
         // check if columnName is already in sort array
         let i = 0;
         for (; i < this.sort.length; i++) {
@@ -202,7 +199,7 @@ export class KetchupDataTable {
                     sortObj.sortMode === SortMode.A ? SortMode.D : SortMode.A,
             };
 
-            if (e.ctrlKey) {
+            if (ctrlKey) {
                 const newSort = [...this.sort];
                 newSort[i] = newSortObj;
                 this.sort = newSort;
@@ -217,7 +214,7 @@ export class KetchupDataTable {
 
             // if CTRL is pressed, push to array
             // else, replace current array
-            if (e.ctrlKey) {
+            if (ctrlKey) {
                 this.sort = [...this.sort, sortObj];
             } else {
                 this.sort = [sortObj];
@@ -225,30 +222,52 @@ export class KetchupDataTable {
         }
     }
 
-    private onFilterChange(event: CustomEvent) {
+    private onFilterChange({ detail }, column: string) {
         // resetting current page
         this.currentPage = 1;
 
-        // getting column name from data-col
-        const columnName = (event.target as HTMLElement).dataset.col;
-
         const newFilters = { ...this.filters };
-        if (event.detail.value.length === 0) {
-            delete newFilters[columnName];
+        if (detail.value.length === 0) {
+            delete newFilters[column];
         } else {
-            newFilters[columnName] = event.detail.value;
+            newFilters[column] = detail.value;
         }
 
         this.filters = newFilters;
     }
 
-    private onGlobalFilterChange(event: CustomEvent) {
+    private onGlobalFilterChange({ detail }) {
         // resetting current page
         this.currentPage = 1;
 
-        this.globalFilterValue = event.detail.value;
+        this.globalFilterValue = detail.value;
     }
 
+    private handlePageChanged({ detail }) {
+        this.currentPage = detail.newPage;
+    }
+
+    private handleRowsPerPageChanged({ detail }) {
+        this.currentRowsPerPage = detail.newRowsPerPage;
+    }
+
+    private onRowClick(row: Row) {
+        this.kupRowSelected.emit({ row });
+        this.selectedRow = row;
+    }
+
+    private onRowExpand(row: Row) {
+        // row should be a 'group' row
+        row.group.expanded = !row.group.expanded;
+
+        // updating group map
+        this.groupState[row.group.label].expanded = row.group.expanded;
+
+        // changing group state to trigger rendering
+        this.groupState = { ...this.groupState };
+    }
+
+    // utility methods
     private groupRows(rows: Array<any>): Array<Row> {
         if (!this.isGrouping()) {
             return rows;
@@ -306,9 +325,7 @@ export class KetchupDataTable {
 
     private getSortIcon(columnName: string): string {
         // check if column in sort array
-        for (let i = 0; i < this.sort.length; i++) {
-            const sortObj = this.sort[i];
-
+        for (let sortObj of this.sort) {
             if (sortObj.column === columnName) {
                 return 'A' === sortObj.sortMode
                     ? 'mdi-sort-ascending'
@@ -318,30 +335,6 @@ export class KetchupDataTable {
 
         // default
         return 'mdi-sort';
-    }
-
-    private handlePageChanged({ detail }) {
-        this.currentPage = detail.newPage;
-    }
-
-    private handleRowsPerPageChanged({ detail }) {
-        this.currentRowsPerPage = detail.newRowsPerPage;
-    }
-
-    private onRowClick(row: Row) {
-        this.kupRowSelected.emit({ row });
-        this.selectedRow = row;
-    }
-
-    private onRowExpand(row: Row) {
-        // row should be a 'group' row
-        row.group.expanded = !row.group.expanded;
-
-        // updating group map
-        this.groupState[row.group.label].expanded = row.group.expanded;
-
-        // forcing rendering... meh
-        this.groupState = { ...this.groupState };
     }
 
     // render methods
@@ -363,7 +356,7 @@ export class KetchupDataTable {
                             initialValue={filterValue}
                             data-col={column.name}
                             onKetchupTextInputUpdated={(e) => {
-                                this.onFilterChange(e);
+                                this.onFilterChange(e, column.name);
                             }}
                         />
                     </div>
@@ -377,8 +370,9 @@ export class KetchupDataTable {
                     <span class="column-sort">
                         <icon
                             class={'mdi ' + this.getSortIcon(column.name)}
-                            data-col={column.name}
-                            onClick={(e: MouseEvent) => this.onColumnSort(e)}
+                            onClick={(e: MouseEvent) =>
+                                this.onColumnSort(e, column.name)
+                            }
                         />
                     </span>
                 );
@@ -454,9 +448,7 @@ export class KetchupDataTable {
             });
 
             // fixing count and avg
-            for (let i = 0; i < keys.length; i++) {
-                const key = keys[i];
-
+            for (let key of keys) {
                 if (this.totals[key] === TotalMode.AVARAGE) {
                     const sum: number = footerRow[key];
 
