@@ -8,6 +8,7 @@ import {
     SortMode,
     GenericMap,
     GroupObject,
+    TotalMode,
 } from './ketchup-data-table-declarations';
 
 export function sortRows(
@@ -264,6 +265,65 @@ export function groupRows(
     });
 
     return groupRows;
+}
+
+export function calcTotals(
+    rows: Array<Row> = [],
+    totals: { [index: string]: TotalMode } = {}
+): { [index: string]: number } {
+    if (!rows || !totals) {
+        return {};
+    }
+
+    const keys = Object.keys(totals);
+
+    const footerRow: { [index: string]: number } = {};
+
+    // if there are only COUNT, no need to loop on rows
+    let onlyCount =
+        keys.length === 0 ||
+        keys.every((key) => totals[key] === TotalMode.COUNT);
+
+    if (onlyCount) {
+        keys.forEach((columnName) => (footerRow[columnName] = rows.length));
+    } else {
+        rows.forEach((r) => {
+            keys.filter((key) => TotalMode.COUNT !== totals[key]).forEach(
+                (key) => {
+                    // getting column
+                    const cell = r.cells[key];
+
+                    // check if number
+                    if (cell.obj.t === 'NR') {
+                        const cellValue = numeral(cell.obj.k);
+
+                        const currentFooterValue = footerRow[key] || 0;
+
+                        footerRow[key] = cellValue
+                            .add(currentFooterValue)
+                            .value();
+                    }
+                }
+            );
+        });
+
+        // fixing count and avg
+        for (let key of keys) {
+            if (totals[key] === TotalMode.AVARAGE) {
+                const sum: number = footerRow[key];
+
+                if (sum && rows.length > 0) {
+                    footerRow[key] = numeral(sum)
+                        .divide(rows.length)
+                        .value();
+                }
+            } else if (totals[key] === TotalMode.COUNT) {
+                footerRow[key] = rows.length;
+            }
+        }
+    }
+
+    return footerRow;
 }
 
 function compareCell(cell1: Cell, cell2: Cell, sortMode: SortMode): number {

@@ -19,9 +19,12 @@ import {
     GroupObject,
 } from './ketchup-data-table-declarations';
 
-import { filterRows, groupRows, sortRows } from './ketchup-data-table-helper';
-
-import numeral from 'numeral';
+import {
+    calcTotals,
+    filterRows,
+    groupRows,
+    sortRows,
+} from './ketchup-data-table-helper';
 
 @Component({
     tag: 'kup-data-table',
@@ -415,53 +418,7 @@ export class KetchupDataTable {
             return null;
         }
 
-        const keys = Object.keys(this.totals);
-
-        const footerRow = {};
-
-        // if there are only COUNT, no need to loop on rows
-        let onlyCount =
-            keys.length === 0 ||
-            keys.every((key) => this.totals[key] === TotalMode.COUNT);
-
-        if (onlyCount) {
-            keys.forEach((columnName) => (footerRow[columnName] = rows.length));
-        } else {
-            rows.forEach((r) => {
-                keys.filter(
-                    (key) => TotalMode.COUNT !== this.totals[key]
-                ).forEach((key) => {
-                    // getting column
-                    const cell = r.cells[key];
-
-                    // check if number
-                    if (cell.obj.t === 'NR') {
-                        const cellValue = numeral(cell.obj.k);
-
-                        const currentFooterValue = footerRow[key] || 0;
-
-                        footerRow[key] = cellValue
-                            .add(currentFooterValue)
-                            .value();
-                    }
-                });
-            });
-
-            // fixing count and avg
-            for (let key of keys) {
-                if (this.totals[key] === TotalMode.AVARAGE) {
-                    const sum: number = footerRow[key];
-
-                    if (sum && rows.length > 0) {
-                        footerRow[key] = numeral(sum)
-                            .divide(rows.length)
-                            .value();
-                    }
-                } else if (this.totals[key] === TotalMode.COUNT) {
-                    footerRow[key] = rows.length;
-                }
-            }
-        }
+        const footerRow = calcTotals(rows, this.totals);
 
         const footerCells = this.getVisibleColumns().map(({ name }) => (
             <td>{footerRow[name]}</td>
@@ -618,6 +575,7 @@ export class KetchupDataTable {
         ) {
             paginatorTop = (
                 <kup-paginator
+                    id="top-paginator"
                     max={filteredRows.length}
                     perPage={this.rowsPerPage}
                     selectedPerPage={this.currentRowsPerPage}
@@ -637,6 +595,7 @@ export class KetchupDataTable {
         ) {
             paginatorBottom = (
                 <kup-paginator
+                    id="bottom-paginator"
                     max={filteredRows.length}
                     perPage={this.rowsPerPage}
                     selectedPerPage={this.currentRowsPerPage}
