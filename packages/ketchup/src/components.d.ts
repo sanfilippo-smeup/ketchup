@@ -24,7 +24,7 @@ import {
   PaginatorPos,
   Row,
   SortObject,
-  TotalMode,
+  TotalsMap,
 } from './components/ketchup-data-table/ketchup-data-table-declarations';
 import {
   EventEmitter,
@@ -196,9 +196,7 @@ export namespace Components {
     'showHeader': boolean;
     'sort': Array<SortObject>;
     'sortEnabled': boolean;
-    'totals': {
-      [index: string]: TotalMode;
-    };
+    'totals': TotalsMap;
   }
   interface KupDataTableAttributes extends StencilHTMLAttributes {
     'columnsWidth'?: Array<{
@@ -222,9 +220,7 @@ export namespace Components {
     'showHeader'?: boolean;
     'sort'?: Array<SortObject>;
     'sortEnabled'?: boolean;
-    'totals'?: {
-      [index: string]: TotalMode;
-    };
+    'totals'?: TotalsMap;
   }
 
   interface KetchupFld {

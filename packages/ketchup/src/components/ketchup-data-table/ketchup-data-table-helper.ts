@@ -9,6 +9,7 @@ import {
     GenericMap,
     GroupObject,
     TotalMode,
+    TotalsMap,
 } from './ketchup-data-table-declarations';
 
 export function sortRows(
@@ -179,7 +180,8 @@ export function filterRows(
 
 export function groupRows(
     rows: Array<Row> = [],
-    groups: Array<GroupObject> = []
+    groups: Array<GroupObject> = [],
+    totals: TotalsMap = {}
 ): Array<Row> {
     if (!rows) {
         return [];
@@ -214,10 +216,12 @@ export function groupRows(
             // create group row
             groupRow = {
                 group: {
+                    parent: null,
                     column: columnName,
                     expanded: false,
                     label: cellValue,
                     children: [],
+                    totals: {},
                 },
                 cells: {},
             };
@@ -248,10 +252,12 @@ export function groupRows(
                 tempGroupingRow = {
                     cells: {},
                     group: {
+                        parent: groupRow,
                         column: group.column,
                         children: [],
                         expanded: false,
                         label: tempCellValue,
+                        totals: {},
                     },
                 };
                 groupRow.group.children.push(tempGroupingRow);
@@ -262,9 +268,140 @@ export function groupRows(
 
         // adding row
         groupRow.group.children.push(row);
+
+        updateGroupTotal(groupRow, totals, row);
     });
 
+    adjustGroupsAvarage(groupRows, totals);
+
     return groupRows;
+}
+
+function updateGroupTotal(
+    groupRow: Row,
+    totals: TotalsMap,
+    addedRow: Row
+): void {
+    if (!groupRow || !totals) {
+        return;
+    }
+
+    const keys = Object.keys(totals);
+
+    if (keys.length === 0) {
+        return;
+    }
+
+    keys.forEach((key) => {
+        const currentTotalValue = groupRow.group.totals[key] || 0;
+
+        const cell = addedRow.cells[key];
+
+        const isNumber = cell.obj.t === 'NR';
+
+        const totalMode = totals[key];
+
+        switch (totalMode) {
+            case TotalMode.COUNT:
+                groupRow.group.totals[key] = currentTotalValue + 1;
+
+                // updating parents
+                let parent = groupRow.group.parent;
+                while (parent != null) {
+                    const currentParentCount = parent.group.totals[key] || 0;
+
+                    parent.group.totals[key] = currentParentCount + 1;
+
+                    parent = parent.group.parent;
+                }
+                break;
+
+            case TotalMode.SUM:
+            case TotalMode.AVARAGE:
+                if (isNumber) {
+                    const cellValue = numeral(cell.obj.k);
+
+                    groupRow.group.totals[key] = cellValue
+                        .add(currentTotalValue)
+                        .value();
+
+                    // updating parents
+                    let parent = groupRow.group.parent;
+                    while (parent != null) {
+                        const currentParentSum = parent.group.totals[key] || 0;
+
+                        parent.group.totals[key] = cellValue
+                            .add(currentParentSum)
+                            .value();
+
+                        parent = parent.group.parent;
+                    }
+                }
+                break;
+
+            default:
+                console.warn(`invalid total mode: ${totalMode}`);
+                break;
+        }
+    });
+}
+
+function adjustGroupsAvarage(groupRows: Array<Row>, totals: TotalsMap): void {
+    if (!groupRows || !totals) {
+        return;
+    }
+
+    const keys = Object.keys(totals);
+
+    if (groupRows.length === 0 || !groupRows[0].group || keys.length === 0) {
+        return;
+    }
+
+    const avarageKeys = keys.filter((key) => TotalMode.AVARAGE === totals[key]);
+
+    if (avarageKeys.length > 0) {
+        groupRows
+            .filter((groupRow) => groupRow.group.children.length > 0)
+            .forEach((groupRow) => adjustGroupAvarage(groupRow, avarageKeys));
+    }
+}
+
+/**
+ * @returns number of 'leaf' of group
+ */
+function adjustGroupAvarage(row: Row, avarage: Array<string>): number {
+    const children = row.group.children;
+
+    if (children.length === 0) {
+        return 0;
+    }
+
+    let numberOfLeaf = 0;
+
+    // check if child is a grouping row
+    if (children[0].group) {
+        children.forEach((child) => {
+            numberOfLeaf += adjustGroupAvarage(child, avarage);
+        });
+
+        // adjust avarage
+        avarage.forEach((avarageKey) => {
+            row.group.totals[avarageKey] = numeral(row.group.totals[avarageKey])
+                .divide(numberOfLeaf)
+                .value();
+        });
+    } else {
+        numberOfLeaf = children.length;
+
+        // adjust avarage
+        avarage.forEach((avarageKey) => {
+            row.group.totals[avarageKey] = numeral(row.group.totals[avarageKey])
+                .divide(row.group.children.length)
+                .value();
+        });
+    }
+
+    return numberOfLeaf;
 }
 
 export function calcTotals(
@@ -281,7 +418,7 @@ export function calcTotals(
 
     // if there are only COUNT, no need to loop on rows
     let onlyCount =
-        keys.length === 0 ||
+        keys.length === 0 &&
         keys.every((key) => totals[key] === TotalMode.COUNT);
 
     if (onlyCount) {

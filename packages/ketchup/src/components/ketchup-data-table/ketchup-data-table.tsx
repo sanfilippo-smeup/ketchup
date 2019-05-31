@@ -14,9 +14,9 @@ import {
     SortMode,
     SortObject,
     Row,
-    TotalMode,
     GenericMap,
     GroupObject,
+    TotalsMap,
 } from './ketchup-data-table-declarations';
 
 import {
@@ -41,9 +41,7 @@ export class KetchupDataTable {
     filters: GenericMap = {};
 
     @Prop()
-    totals: {
-        [index: string]: TotalMode;
-    };
+    totals: TotalsMap;
 
     @Prop()
     globalFilter = false;
@@ -329,7 +327,7 @@ export class KetchupDataTable {
             return rows;
         }
 
-        const groupedRows = groupRows(rows, this.groups);
+        const groupedRows = groupRows(rows, this.groups, this.totals);
 
         this.adjustGroupState(groupedRows);
 
@@ -594,6 +592,9 @@ export class KetchupDataTable {
                 );
             }
 
+            // adding row to rendered rows
+            this.renderedRows.push(row);
+
             return (
                 <tr class={rowClass} onClick={(e) => this.onRowClick(e, row)}>
                     {selectRowCell}
@@ -604,26 +605,22 @@ export class KetchupDataTable {
     }
 
     render() {
+        // resetting rows
+        this.renderedRows = [];
+
         // header
         const header = this.renderHeader();
 
         // rows
-        // 1) filters
         const filteredRows = this.getFilteredRows();
 
-        // 2) footer (based on filtered rows)
-        const footer = this.renderFooter(filteredRows);
-
-        // 3) grouping
         const grouped = this.groupRows(filteredRows);
 
-        // 4) sort
         const sortedRows = this.sortRows(grouped);
 
-        // 5) pagination
-        const paginatedRows = this.paginateRows(sortedRows);
+        const footer = this.renderFooter(sortedRows);
 
-        this.renderedRows = paginatedRows;
+        const paginatedRows = this.paginateRows(sortedRows);
 
         let rows = null;
         if (paginatedRows.length === 0) {
