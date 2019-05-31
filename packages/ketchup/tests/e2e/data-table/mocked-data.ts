@@ -35,10 +35,12 @@ function createData(colSize: number, rowSize: number) {
 
             if (j === 0) {
                 cell.obj.t = '';
-                cell.value = fld1Values[getRandomArbitrary(0, 4)];
+                cell.value = fld1Values[i % fld1Values.length];
+                cell.obj.k = cell.value;
             } else if (j === 1) {
                 cell.obj.t = '';
                 cell.value = fld2Values[getRandomArbitrary(0, 4)];
+                cell.obj.k = cell.value;
             }
 
             currentRow.cells[columns[j].name] = cell;
@@ -337,3 +339,5 @@ msMockData.rows = [
 ];
 
 export const multiSortMockData = msMockData;
+
+export const groupingData = createData(10, 50);

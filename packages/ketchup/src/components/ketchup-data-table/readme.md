@@ -23,7 +23,7 @@
 | `showHeader`     | `show-header`     |             | `boolean`                                                      | `true`             |
 | `sort`           | --                |             | `SortObject[]`                                                 | `[]`               |
 | `sortEnabled`    | `sort-enabled`    |             | `boolean`                                                      | `true`             |
-| `totals`         | --                |             | `{ [index: string]: TotalMode; }`                              | `undefined`        |
+| `totals`         | --                |             | `TotalsMap`                                                    | `undefined`        |
 
 
 ## Events

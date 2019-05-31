@@ -23,6 +23,13 @@ h3 {
 
     <h3>Hidden group on continent and state</h3>
     <kup-data-table :data.prop="data" :groups.prop="group4"></kup-data-table>
+
+    <h3>Group and continent and count on state</h3>
+    <kup-data-table
+      :data.prop="data"
+      :groups.prop="group1"
+      :totals.prop="totals1"
+    ></kup-data-table>
   </div>
 </template>
 
@@ -66,6 +73,9 @@ export default {
           visible: false,
         },
       ],
+      totals1: {
+        FLD2: 'Count',
+      },
     };
   },
 };

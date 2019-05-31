@@ -185,6 +185,10 @@ export class KetchupDataTable {
         return this.groups && this.groups.length > 0;
     }
 
+    private hasTotals() {
+        return this.totals && Object.keys(this.totals).length > 0;
+    }
+
     // event listeners
     private onColumnSort({ ctrlKey }: MouseEvent, columnName: string) {
         // check if columnName is already in sort array
@@ -391,6 +395,20 @@ export class KetchupDataTable {
         return 'mdi-sort';
     }
 
+    private calculateColspan() {
+        let colSpan = this.getVisibleColumns().length;
+
+        if (this.multiSelection) {
+            colSpan += 1;
+        }
+
+        if (this.isGrouping() && this.hasTotals()) {
+            colSpan += 1;
+        }
+
+        return colSpan;
+    }
+
     // render methods
     private renderHeader() {
         const hasCustomColumnsWidth = this.columnsWidth.length > 0;
@@ -474,13 +492,18 @@ export class KetchupDataTable {
             );
         }
 
-        return [multiSelectColumn, ...dataColumns];
+        let groupColumn = null;
+        if (this.isGrouping() && this.hasTotals()) {
+            groupColumn = <th />;
+        }
+
+        return [multiSelectColumn, groupColumn, ...dataColumns];
     }
 
     renderFooter(
         rows: Array<Row>
     ): JSXElements.HTMLAttributes<HTMLTableSectionElement> | null {
-        if (!this.totals) {
+        if (!this.hasTotals()) {
             // no footer
             return null;
         }
@@ -519,9 +542,13 @@ export class KetchupDataTable {
                 indent.push(<span class="indent" />);
             }
 
-            jsxRows.push(
-                <tr class="group">
-                    <td colSpan={visibleColumns.length}>
+            if (this.hasTotals()) {
+                const cells = [];
+
+                // adding 'grouping' cell
+                const colSpan = this.multiSelection ? 2 : 1;
+                cells.push(
+                    <td colSpan={colSpan}>
                         {indent}
                         <icon
                             class={icon}
@@ -529,8 +556,27 @@ export class KetchupDataTable {
                         />
                         {row.group.label}
                     </td>
-                </tr>
-            );
+                );
+
+                for (let column of visibleColumns) {
+                    cells.push(<td>{row.group.totals[column.name]}</td>);
+                }
+
+                jsxRows.push(<tr>{cells}</tr>);
+            } else {
+                jsxRows.push(
+                    <tr class="group">
+                        <td colSpan={this.calculateColspan()}>
+                            {indent}
+                            <icon
+                                class={icon}
+                                onClick={() => this.onRowExpand(row)}
+                            />
+                            {row.group.label}
+                        </td>
+                    </tr>
+                );
+            }
 
             // if group is expanded, add children
             if (row.group.expanded) {
@@ -552,7 +598,7 @@ export class KetchupDataTable {
         } else {
             const cells = visibleColumns.map(({ name }, index) => {
                 let indend = [];
-                if (index === 0) {
+                if (index === 0 && !(this.isGrouping() && this.hasTotals())) {
                     for (let i = 0; i < level; i++) {
                         indend.push(<span class="indent" />);
                     }
@@ -592,12 +638,18 @@ export class KetchupDataTable {
                 );
             }
 
+            let groupingCell = null;
+            if (this.isGrouping() && this.hasTotals()) {
+                groupingCell = <td />;
+            }
+
             // adding row to rendered rows
             this.renderedRows.push(row);
 
             return (
                 <tr class={rowClass} onClick={(e) => this.onRowClick(e, row)}>
                     {selectRowCell}
+                    {groupingCell}
                     {cells}
                 </tr>
             );
@@ -626,9 +678,7 @@ export class KetchupDataTable {
         if (paginatedRows.length === 0) {
             rows = (
                 <tr>
-                    <td colSpan={this.getVisibleColumns().length}>
-                        Empty data
-                    </td>
+                    <td colSpan={this.calculateColspan()}>Empty data</td>
                 </tr>
             );
         } else {
