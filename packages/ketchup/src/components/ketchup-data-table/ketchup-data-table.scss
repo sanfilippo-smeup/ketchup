@@ -49,6 +49,12 @@
       }
     }
 
+    thead {
+      th {
+        position: relative;
+      }
+    }
+
     tbody {
       > tr {
         &:hover,
@@ -111,6 +117,32 @@
 
     &:hover {
       color: red;
+    }
+  }
+}
+
+// column menu
+.column-menu {
+  position: absolute;
+  top: 0.5rem;
+  left: -0.5rem;
+  z-index: 100;
+  background: white;
+  border: 1px solid #ccc;
+  font-weight: normal;
+
+  ul {
+    list-style-type: none;
+    margin: 0; // override browser default
+    padding: 0; // override browser default
+
+    > li {
+      padding: 0.5rem;
+      &:hover {
+        cursor: pointer;
+        background: var(--int_main-background-color);
+        color: white;
+      }
     }
   }
 }

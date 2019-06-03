@@ -98,6 +98,12 @@ export class KetchupDataTable {
         };
     } = {};
 
+    /**
+     * name of the column with an open menu
+     */
+    @State()
+    private openedMenu: string = null;
+
     @Watch('rowsPerPage')
     rowsPerPageHandler(newValue: number) {
         this.currentRowsPerPage = newValue;
@@ -172,6 +178,20 @@ export class KetchupDataTable {
         for (let column of this.getColumns()) {
             if (column.name === name) {
                 return column;
+            }
+        }
+
+        return null;
+    }
+
+    private getGroupByName(column: string): GroupObject {
+        if (!this.isGrouping()) {
+            return null;
+        }
+
+        for (let group of this.groups) {
+            if (group.column === column) {
+                return group;
             }
         }
 
@@ -348,6 +368,37 @@ export class KetchupDataTable {
         }
     }
 
+    private onColumnMouseOver(column: string) {
+        this.openedMenu = column;
+    }
+
+    private onColumnMouseLeave(column: string) {
+        if (this.openedMenu === column) {
+            this.openedMenu = null;
+        }
+    }
+
+    private switchColumnGroup(group: GroupObject, column: string) {
+        // resetting opened menu
+        this.openedMenu = null;
+
+        if (group !== null) {
+            // remove from grouping
+            const index = this.groups.indexOf(group);
+            this.groups.slice(index, 1);
+            this.groups = [...this.groups];
+
+            // reset group state
+            this.groupState = null;
+        } else {
+            // add to groups
+            this.groups = [...this.groups, { column, visible: true }];
+
+            // reset group state
+            this.groupState = null;
+        }
+    }
+
     // utility methods
     private groupRows(rows: Array<any>): Array<Row> {
         if (!this.isGrouping()) {
@@ -490,11 +541,47 @@ export class KetchupDataTable {
                 }
             }
 
+            const columnMenuItems: JSX.Element[] = [];
+
+            // adding grouping
+            const group = this.getGroupByName(column.name);
+            const groupLabel =
+                group != null
+                    ? 'Disattiva raggruppamento'
+                    : 'Attiva raggruppamento';
+
+            columnMenuItems.push(
+                <li
+                    role="menuitem"
+                    onClick={() => this.switchColumnGroup(group, column.name)}
+                >
+                    <icon class="mdi mdi-book" /> {groupLabel}
+                </li>
+            );
+
+            let columnMenu = null;
+            if (columnMenuItems.length !== 0) {
+                const style = {
+                    display: this.openedMenu === column.name ? 'block' : 'none',
+                };
+
+                columnMenu = (
+                    <div style={style} class="column-menu">
+                        <ul role="menubar">{columnMenuItems}</ul>
+                    </div>
+                );
+            }
+
             return (
-                <th style={thStyle}>
+                <th
+                    style={thStyle}
+                    onMouseOver={() => this.onColumnMouseOver(column.name)}
+                    onMouseLeave={() => this.onColumnMouseLeave(column.name)}
+                >
                     <span class="column-title">{column.title}</span>
                     {sort}
                     {filter}
+                    {columnMenu}
                 </th>
             );
         });
