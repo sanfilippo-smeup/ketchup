@@ -8,6 +8,7 @@
 
 :host {
   // variables
+  --int_main-background-color: var(--kup-data-table_background-color, #6aaaa7);
   --int_color: var(--kup-data-table_color, #111);
   --int_hover-color: var(--kup-data-table_hover-color, #545454);
   --int_hover-background-color: var(
@@ -89,4 +90,27 @@
 #globalFilter {
   margin-bottom: 0.5rem;
   text-align: center;
+}
+
+// grouping chips
+#group-chips {
+  display: flex;
+  margin-bottom: 0.5rem;
+
+  > .group-chip {
+    display: flex;
+    background-color: var(--int_main-background-color);
+    padding: 0.5rem;
+    color: white;
+    margin-right: 0.5rem;
+    cursor: pointer;
+
+    icon {
+      margin-right: 0.5rem;
+    }
+
+    &:hover {
+      color: red;
+    }
+  }
 }

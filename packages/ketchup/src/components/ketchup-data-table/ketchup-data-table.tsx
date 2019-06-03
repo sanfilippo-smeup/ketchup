@@ -73,7 +73,7 @@ export class KetchupDataTable {
     @Prop()
     selectRow: number;
 
-    @Prop()
+    @Prop({ mutable: true })
     groups: Array<GroupObject> = [];
 
     @Prop()
@@ -168,6 +168,16 @@ export class KetchupDataTable {
         return columns;
     }
 
+    private getColumnByName(name: string): Column {
+        for (let column of this.getColumns()) {
+            if (column.name === name) {
+                return column;
+            }
+        }
+
+        return null;
+    }
+
     private getRows(): Array<Row> {
         return this.data && this.data.rows ? this.data.rows : [];
     }
@@ -183,6 +193,19 @@ export class KetchupDataTable {
 
     private isGrouping() {
         return this.groups && this.groups.length > 0;
+    }
+
+    private removeGroup(group: GroupObject) {
+        const index = this.groups.indexOf(group);
+
+        if (index >= 0) {
+            // removing group from prop
+            this.groups.splice(index, 1);
+            this.groups = [...this.groups];
+
+            // resetting group state
+            this.groupState = null;
+        }
     }
 
     private hasTotals() {
@@ -569,7 +592,7 @@ export class KetchupDataTable {
                         <td colSpan={this.calculateColspan()}>
                             {indent}
                             <icon
-                                class={icon}
+                                class={`row-expander ${icon}`}
                                 onClick={() => this.onRowExpand(row)}
                             />
                             {row.group.label}
@@ -666,13 +689,13 @@ export class KetchupDataTable {
         // rows
         const filteredRows = this.getFilteredRows();
 
-        const grouped = this.groupRows(filteredRows);
-
-        const sortedRows = this.sortRows(grouped);
+        const sortedRows = this.sortRows(filteredRows);
 
         const footer = this.renderFooter(sortedRows);
 
-        const paginatedRows = this.paginateRows(sortedRows);
+        const grouped = this.groupRows(sortedRows);
+
+        const paginatedRows = this.paginateRows(grouped);
 
         let rows = null;
         if (paginatedRows.length === 0) {
@@ -753,8 +776,33 @@ export class KetchupDataTable {
             tableClass = 'noGrid';
         }
 
+        let groupChips = null;
+        if (this.isGrouping()) {
+            const chips = this.groups.map((group) => {
+                const column = this.getColumnByName(group.column);
+
+                if (column) {
+                    return (
+                        <div
+                            class="group-chip"
+                            tabIndex={0}
+                            onClick={() => this.removeGroup(group)}
+                        >
+                            <icon class="mdi mdi-close-circle" />
+                            {column.title}
+                        </div>
+                    );
+                } else {
+                    return null;
+                }
+            });
+
+            groupChips = <div id="group-chips">{chips}</div>;
+        }
+
         return (
             <div>
+                {groupChips}
                 {paginatorTop}
                 {globalFilter}
                 <div id="data-table-wrapper">
