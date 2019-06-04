@@ -224,7 +224,7 @@ export class KetchupDataTable {
             this.groups = [...this.groups];
 
             // resetting group state
-            this.groupState = null;
+            this.groupState = {};
         }
     }
 
@@ -385,17 +385,17 @@ export class KetchupDataTable {
         if (group !== null) {
             // remove from grouping
             const index = this.groups.indexOf(group);
-            this.groups.slice(index, 1);
+            this.groups.splice(index, 1);
             this.groups = [...this.groups];
 
             // reset group state
-            this.groupState = null;
+            this.groupState = {};
         } else {
             // add to groups
             this.groups = [...this.groups, { column, visible: true }];
 
             // reset group state
-            this.groupState = null;
+            this.groupState = {};
         }
     }
 
